@@ -32,6 +32,20 @@ func main() {
 }
 ```
 
+## Differences with c-bata/go-prompt
+
+### 0.2.4 is c-bata/go-prompt from c-bata/go-prompt at august 2019
+
+Commit [c-bata/go-prompt@0f95e1d](https://github.com/c-bata/go-prompt/commit/0f95e1d1de2e6f0119b69fd4d79967e4b64fa21b)
+
+### 0.2.4.1 is the Completion on Down new option
+
+Start to select entries with the Down arrow key.  
+No need to type <key>Tab</key> to select the first entry.
+
+- https://github.com/VonC/go-prompt/compare/master...VonC:arrow
+- PR [c-bata/go-prompt#141](https://github.com/c-bata/go-prompt/pull/141)
+
 #### Projects using go-prompt
 
 * [c-bata/kube-prompt : An interactive kubernetes client featuring auto-complete written in Go.](https://github.com/c-bata/kube-prompt)
