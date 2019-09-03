@@ -46,6 +46,13 @@ No need to type <key>Tab</key> to select the first entry.
 - https://github.com/VonC/go-prompt/compare/master...VonC:arrow
 - PR [c-bata/go-prompt#141](https://github.com/c-bata/go-prompt/pull/141)
 
+### 0.2.4.2 is the Exit Checker on Input new option
+
+If set, a function is called with the selection.  
+
+- If that function returns true, the prompt stops and exit, allowing the resto of the program to run.
+- If that function returns false, the prompt goes on querying for a new selection to be made
+
 #### Projects using go-prompt
 
 * [c-bata/kube-prompt : An interactive kubernetes client featuring auto-complete written in Go.](https://github.com/c-bata/kube-prompt)
