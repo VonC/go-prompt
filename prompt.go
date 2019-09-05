@@ -29,11 +29,8 @@ type Prompt struct {
 	keyBindings       []KeyBind
 	ASCIICodeBindings []ASCIICodeBind
 	keyBindMode       KeyBindMode
-<<<<<<< HEAD
 	completionOnDown  bool
-=======
 	exitor            Exitor
->>>>>>> exitor
 }
 
 // Exec is the struct contains user input context.
