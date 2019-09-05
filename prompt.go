@@ -154,7 +154,7 @@ func (p *Prompt) feed(b []byte) (shouldExit bool, exec *Exec) {
 		p.buf.InsertText(string(b), false, true)
 	}
 
-	p.handleKeyBinding(key)
+	shouldExit = p.handleKeyBinding(key)
 	return
 }
 
@@ -184,7 +184,8 @@ func (p *Prompt) handleCompletionKeyBinding(key Key, completing bool) {
 	}
 }
 
-func (p *Prompt) handleKeyBinding(key Key) {
+func (p *Prompt) handleKeyBinding(key Key) bool {
+	shouldExit := false
 	for i := range commonKeyBindings {
 		kb := commonKeyBindings[i]
 		if kb.Key == key {
@@ -208,6 +209,10 @@ func (p *Prompt) handleKeyBinding(key Key) {
 			kb.Fn(p.buf)
 		}
 	}
+	if p.exitor != nil && p.exitor(p.buf.Text()) {
+		shouldExit = true
+	}
+	return shouldExit
 }
 
 func (p *Prompt) handleASCIICodeBinding(b []byte) bool {
