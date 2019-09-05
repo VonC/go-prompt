@@ -11,6 +11,10 @@ import (
 // Executor is called when user input something text.
 type Executor func(string)
 
+// Exitor is called after user input something text, to check if
+// prompt must stop and exit
+type Exitor func(string) bool
+
 // Completer should return the suggest item from Document.
 type Completer func(Document) []Suggest
 
@@ -25,6 +29,8 @@ type Prompt struct {
 	keyBindings       []KeyBind
 	ASCIICodeBindings []ASCIICodeBind
 	keyBindMode       KeyBindMode
+	completionOnDown  bool
+	exitor            Exitor
 }
 
 // Exec is the struct contains user input context.
@@ -73,6 +79,11 @@ func (p *Prompt) Run() {
 				p.executor(e.input)
 
 				p.completion.Update(*p.buf.Document())
+
+				if p.exitor != nil && p.exitor(e.input) {
+					return
+				}
+
 				p.renderer.Render(p.buf, p.completion)
 
 				// Set raw mode
@@ -126,6 +137,8 @@ func (p *Prompt) feed(b []byte) (shouldExit bool, exec *Exec) {
 		if !completing { // Don't use p.completion.Completing() because it takes double operation when switch to selected=-1.
 			if newBuf, changed := p.history.Newer(p.buf); changed {
 				p.buf = newBuf
+			} else if p.completionOnDown {
+				p.completion.Next()
 			}
 			return
 		}
@@ -141,7 +154,7 @@ func (p *Prompt) feed(b []byte) (shouldExit bool, exec *Exec) {
 		p.buf.InsertText(string(b), false, true)
 	}
 
-	p.handleKeyBinding(key)
+	shouldExit = p.handleKeyBinding(key)
 	return
 }
 
@@ -171,7 +184,8 @@ func (p *Prompt) handleCompletionKeyBinding(key Key, completing bool) {
 	}
 }
 
-func (p *Prompt) handleKeyBinding(key Key) {
+func (p *Prompt) handleKeyBinding(key Key) bool {
+	shouldExit := false
 	for i := range commonKeyBindings {
 		kb := commonKeyBindings[i]
 		if kb.Key == key {
@@ -195,6 +209,10 @@ func (p *Prompt) handleKeyBinding(key Key) {
 			kb.Fn(p.buf)
 		}
 	}
+	if p.exitor != nil && p.exitor(p.buf.Text()) {
+		shouldExit = true
+	}
+	return shouldExit
 }
 
 func (p *Prompt) handleASCIICodeBinding(b []byte) bool {

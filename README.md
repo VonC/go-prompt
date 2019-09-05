@@ -32,6 +32,66 @@ func main() {
 }
 ```
 
+## Differences with c-bata/go-prompt
+
+### 0.2.4 is c-bata/go-prompt from c-bata/go-prompt at august 2019
+
+Commit [c-bata/go-prompt@0f95e1d](https://github.com/c-bata/go-prompt/commit/0f95e1d1de2e6f0119b69fd4d79967e4b64fa21b)
+
+### 0.2.4.1 is the Completion on Down new option
+
+Start to select entries with the Down arrow key.  
+No need to type <key>Tab</key> to select the first entry.
+
+- https://github.com/VonC/go-prompt/compare/master...VonC:arrow
+- PR [c-bata/go-prompt#141](https://github.com/c-bata/go-prompt/pull/141)
+
+### 0.2.4.2 is the Exit Checker on Input new option
+
+If set, a function is called with the selection.  
+
+- If that function returns true, the prompt stops and exit, allowing the resto of the program to run.
+- If that function returns false, the prompt goes on querying for a new selection to be made
+
+In short: the "Exit Checker" function is only called when `<Enter>` is pressed.
+
+### 0.2.4.3 is the Exit Checker on handleKeyBinding
+
+On each key, the function set in 0.2.4.2 (Exit Checker) can determine if one should quit go-prompt (and go on with the rest of the Go program execution) or not.
+
+If that function detects an attribute of an object has been set, it can decide to exit go-prompt.
+
+That allows to associate functions to `<CTRL>`+`<C>` or `<ESC>`, which will set said attribute of a custom object to true.  
+Since the "Exit checker" is now called on each key pressed (including `<CTRL>`+`<C>` or `<ESC>`), that will trigger an exit of go-prompt.
+
+Example:
+
+````go
+type choice struct {
+	mustExit bool
+}
+
+func (c *choice) exit(_ *prompt.Buffer) {
+	c.mustExit = true
+}
+
+func (c *choice) checkIfExit(in string) bool {
+	return c.mustExit
+}
+...
+	c := &choice{}
+	quitOnEscape := prompt.KeyBind{
+		Key: prompt.Escape,
+		Fn:  c.exit,
+	}
+	p := prompt.New(
+		...,
+		prompt.OptionSetExitCheckerOnInput(c.checkIfExit),
+	)
+````
+
+A simple `<Esc>` would exit the go-prompt loop immediatly without exiting the all Go program using go-prompt.
+
 #### Projects using go-prompt
 
 * [c-bata/kube-prompt : An interactive kubernetes client featuring auto-complete written in Go.](https://github.com/c-bata/kube-prompt)
