@@ -105,6 +105,9 @@ A simple `<Esc>` would exit the go-prompt loop immediatly without exiting the al
 * [abs-lang/abs: ABS is a scripting language that works best on terminal. It tries to combine the elegance of languages such as Python, or Ruby, to the convenience of Bash.](https://github.com/abs-lang/abs)
 * [takashabe/btcli: btcli is a CLI client for the Bigtable. Has many read options and auto-completion.](https://github.com/takashabe/btcli)
 * [ysn2233/kafka-prompt: An interactive kafka-prompt(kafka-shell) built on existing kafka command client](https://github.com/ysn2233/kafka-prompt)
+* [fishi0x01/vsh: HashiCorp Vault interactive shell](https://github.com/fishi0x01/vsh)
+* [mstrYoda/docker-shell: A simple interactive prompt for docker](https://github.com/mstrYoda/docker-shell)
+* [c-bata/gh-prompt: An interactive GitHub CLI featuring auto-complete.](https://github.com/c-bata/gh-prompt)
 * (If you create a CLI utility using go-prompt and want your own project to be listed here, please submit a GitHub issue.)
 
 ## Features
